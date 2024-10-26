@@ -3,6 +3,10 @@ from tkinter import ttk
 
 from uap_at import AirtableClient
 
+from uap_fb import FirebaseClient
+
+from datetime import datetime
+
 class UAP_UI:
     def __init__(self, root):
         self.root = root
@@ -39,6 +43,7 @@ class UAP_UI:
         self.mess_type = tk.StringVar()
 
         self.at = AirtableClient()
+        self.fb = FirebaseClient()
 
         self.create_widgets()
 
@@ -123,6 +128,13 @@ class UAP_UI:
                 new_menu[day][meal] = text_box.get("1.0", tk.END)
                 new_menu[day]['id'] = self.at.get_menu(self.hostel_type, self.mess_type.get()[0])[day]['id']
         self.at.update_menu(self.hostel_type, self.mess_type.get()[0], new_menu)
+        time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        updated_caterers = []
+        for block in ["B", "C Girls"] if self.hostel_type == "W" else [x for x in self.hostel_blocks if x not in ["B", "C Girls"]]:
+            for caterer in self.caterers[block]:
+                if caterer not in updated_caterers:
+                    self.fb.update(f"org-backup/vitc/mess/{self.caterer_codes[caterer]}-{self.mess_type.get()[0]}", {"menuUpdated": time})
+                    updated_caterers.append(caterer)
 
 if __name__ == "__main__":
     print("Don't run this file directly. Run main.py instead.")
