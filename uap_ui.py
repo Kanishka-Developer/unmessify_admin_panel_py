@@ -15,8 +15,19 @@ class UAP_UI:
             "B": ["ABFC", "Shakti", "SRRC", "Zenith"],
             "C Boys": ["SRRC", "Zenith"],
             "C Girls": ["SRRC", "Zenith", "ABFC", "Shakti"],
-            "D1": ["CRCL", "Fusion", "Mother", "Proodle"],
-            "D2": ["CRCL", "Fusion", "Mother", "Proodle"],
+            "D1": ["Mother", "Proodle", "CRCL", "Fusion"],
+            "D2": ["Mother", "Proodle", "CRCL", "Fusion"],
+        }
+        # pre-1.4.x
+        self.caterer_codes = {
+            "CRCL": "A1",
+            "Fusion": "A2",
+            "ABFC": "B1",
+            "Shakti": "B2",
+            "SRRC": "C1",
+            "Zenith": "C2",
+            "Mother": "D1",
+            "Proodle": "D2"
         }
         self.mess_types = ["Veg", "Non-Veg", "Special"]
         self.meals = ["Breakfast", "Lunch", "Snacks", "Dinner"]
