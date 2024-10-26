@@ -13,34 +13,156 @@ class UAP_UI:
         self.root.title('Unmessify Admin Panel')
         self.root.geometry('1700x1050')
 
+        self.hostel_types = ["M", "W"]
         self.hostel_blocks = ["A", "B", "C Boys", "C Girls", "D1", "D2"]
-        self.caterers = {
-            "A": ["CRCL", "Fusion", "Mother", "Proodle"],
-            "B": ["ABFC", "Shakti", "SRRC", "Zenith"],
-            "C Boys": ["SRRC", "Zenith"],
-            "C Girls": ["SRRC", "Zenith", "ABFC", "Shakti"],
-            "D1": ["Mother", "Proodle", "CRCL", "Fusion"],
-            "D2": ["Mother", "Proodle", "CRCL", "Fusion"],
-        }
-        # pre-1.4.x
-        self.caterer_codes = {
-            "CRCL": "A1",
-            "Fusion": "A2",
-            "ABFC": "B1",
-            "Shakti": "B2",
-            "SRRC": "C1",
-            "Zenith": "C2",
-            "Mother": "D1",
-            "Proodle": "D2"
-        }
         self.mess_types = ["Veg", "Non-Veg", "Special"]
+        self.caterers = {
+            "A": {
+                "Veg": ["CRCL", "Fusion", "Proodle", "Mother"],
+                "Non-Veg": ["CRCL", "Fusion", "Mother"],
+                "Special": ["Fusion", "Mother"]
+            },
+            "B": {
+                "Veg": ["ABFC", "Shakti", "SRRC", "Zenith"],
+                "Non-Veg": ["ABFC", "Shakti", "SRRC", "Zenith"],
+                "Special": ["ABFC", "Shakti", "SRRC", "Zenith"]
+            },
+            "C Boys": {
+                "Veg": ["SRRC", "Zenith"],
+                "Non-Veg": ["SRRC", "Zenith"],
+                "Special": ["SRRC", "Zenith"]
+            },
+            "C Girls": {
+                "Veg": ["ABFC", "Shakti", "SRRC", "Zenith"],
+                "Non-Veg": ["ABFC", "Shakti", "SRRC", "Zenith"],
+                "Special": ["ABFC", "Shakti", "SRRC", "Zenith"]
+            },
+            "D1": {
+                "Veg": ["CRCL", "Fusion", "Proodle", "Mother"],
+                "Non-Veg": ["CRCL", "Fusion", "Mother"],
+                "Special": ["Fusion", "Mother"]
+            },
+            "D2": {
+                "Veg": ["CRCL", "Fusion", "Proodle", "Mother"],
+                "Non-Veg": ["CRCL", "Fusion", "Mother"],
+                "Special": ["Fusion", "Mother"]
+            }
+        }
+        self.caterer_codes = {
+            "A": {
+                "Veg": {
+                    "CRCL": "A1",
+                    "Fusion": "A2",
+                    "Proodle": "A3",
+                    "Mother": "A4"
+                },
+                "Non-Veg": {
+                    "CRCL": "A1",
+                    "Fusion": "A2",
+                    "Mother": "A3"
+                },
+                "Special": {
+                    "Fusion": "A1",
+                    "Mother": "A2"
+                }
+            },
+            "B": {
+                "Veg": {
+                    "ABFC": "B1",
+                    "Shakti": "B2",
+                    "SRRC": "B3",
+                    "Zenith": "B4"
+                },
+                "Non-Veg": {
+                    "ABFC": "B1",
+                    "Shakti": "B2",
+                    "SRRC": "B3",
+                    "Zenith": "B4"
+                },
+                "Special": {
+                    "ABFC": "B1",
+                    "Shakti": "B2",
+                    "SRRC": "B3",
+                    "Zenith": "B4"
+                }
+            },
+            "C Boys": {
+                "Veg": {
+                    "SRRC": "CB1",
+                    "Zenith": "CB2"
+                },
+                "Non-Veg": {
+                    "SRRC": "CB1",
+                    "Zenith": "CB2"
+                },
+                "Special": {
+                    "SRRC": "CB1",
+                    "Zenith": "CB2"
+                }
+            },
+            "C Girls": {
+                "Veg": {
+                    "ABFC": "CG1",
+                    "Shakti": "CG2",
+                    "SRRC": "CG3",
+                    "Zenith": "CG4"
+                },
+                "Non-Veg": {
+                    "ABFC": "CG1",
+                    "Shakti": "CG2",
+                    "SRRC": "CG3",
+                    "Zenith": "CG4"
+                },
+                "Special": {
+                    "ABFC": "CG1",
+                    "Shakti": "CG2",
+                    "SRRC": "CG3",
+                    "Zenith": "CG4"
+                }
+            },
+            "D1": {
+                "Veg": {
+                    "CRCL": "D11",
+                    "Fusion": "D12",
+                    "Proodle": "D13",
+                    "Mother": "D14"
+                },
+                "Non-Veg": {
+                    "CRCL": "D11",
+                    "Fusion": "D12",
+                    "Mother": "D13"
+                },
+                "Special": {
+                    "Fusion": "D11",
+                    "Mother": "D12"
+                }
+            },
+            "D2": {
+                "Veg": {
+                    "CRCL": "D21",
+                    "Fusion": "D22",
+                    "Proodle": "D23",
+                    "Mother": "D24"
+                },
+                "Non-Veg": {
+                    "CRCL": "D21",
+                    "Fusion": "D22",
+                    "Mother": "D23"
+                },
+                "Special": {
+                    "Fusion": "D21",
+                    "Mother": "D22"
+                }
+            }
+        }
+
         self.meals = ["Breakfast", "Lunch", "Snacks", "Dinner"]
         self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-        self.hostel_block = tk.StringVar()
         self.hostel_type = tk.StringVar()
-        self.caterer = tk.StringVar()
+        self.hostel_block = tk.StringVar()
         self.mess_type = tk.StringVar()
+        self.caterer = tk.StringVar()
 
         self.at = AirtableClient()
         self.fb = FirebaseClient()
