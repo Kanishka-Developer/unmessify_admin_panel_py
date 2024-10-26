@@ -172,19 +172,19 @@ class UAP_UI:
     def create_widgets(self):
         
         self.hostel_block_label = ttk.Label(self.root, text="Hostel Block")
-        self.hostel_block_label.grid(row=0, column=1, sticky='w', padx=(70, 10))
+        self.hostel_block_label.grid(row=0, column=1, sticky='w', padx=(50, 10))
         self.hostel_block_combobox = ttk.Combobox(self.root, values=self.hostel_blocks, textvariable=self.hostel_block)
-        self.hostel_block_combobox.grid(row=0, column=1, sticky='w', padx=(190, 10))
-
-        self.caterer_label = ttk.Label(self.root, text="Caterer")
-        self.caterer_label.grid(row=0, column=2, sticky='w', padx=(340, 10))
-        self.caterer_combobox = ttk.Combobox(self.root, values=[], textvariable=self.caterer)
-        self.caterer_combobox.grid(row=0, column=3, sticky='w', padx=(30, 10))
+        self.hostel_block_combobox.grid(row=0, column=1, sticky='w', padx=(160, 10))
 
         self.mess_type_label = ttk.Label(self.root, text="Mess Type")
-        self.mess_type_label.grid(row=0, column=4, sticky='w', padx=(90, 10))
+        self.mess_type_label.grid(row=0, column=2, sticky='w', padx=(315, 10))
         self.mess_type_combobox = ttk.Combobox(self.root, values=self.mess_types, textvariable=self.mess_type)
-        self.mess_type_combobox.grid(row=0, column=4, sticky='w', padx=(190, 10))
+        self.mess_type_combobox.grid(row=0, column=3, sticky='w', padx=(15, 10))
+
+        self.caterer_label = ttk.Label(self.root, text="Caterer")
+        self.caterer_label.grid(row=0, column=4, sticky='w', padx=(70, 10))
+        self.caterer_combobox = ttk.Combobox(self.root, values=[], textvariable=self.caterer)
+        self.caterer_combobox.grid(row=0, column=4, sticky='w', padx=(150, 10))
 
         self.meal_labels = []
         self.text_boxes = []
@@ -214,15 +214,17 @@ class UAP_UI:
     def on_hostel_block_selected(self, event):
         hostel_block = self.hostel_block.get()
         self.hostel_type = "W" if self.hostel_block.get() in ["B", "C Girls"] else "M"
-        caterers = self.caterers[hostel_block]
+        self.mess_type.set(self.mess_types[0])
+        caterers = self.caterers[hostel_block][self.mess_type.get()]
         self.caterer_combobox['values'] = caterers
         self.caterer.set(caterers[0])
-        self.mess_type.set(self.mess_types[0])
-
         self.update_menu()
 
     def on_mess_type_selected(self, event):
         self.update_menu()
+        caterers = self.caterers[self.hostel_block.get()][self.mess_type.get()]
+        self.caterer_combobox['values'] = caterers
+        self.caterer.set(caterers[0])
 
     def update_menu(self):
         mess_type = self.mess_type.get()
@@ -252,11 +254,26 @@ class UAP_UI:
         self.at.update_menu(self.hostel_type, self.mess_type.get()[0], new_menu)
         time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         updated_caterers = []
-        for block in ["B", "C Girls"] if self.hostel_type == "W" else [x for x in self.hostel_blocks if x not in ["B", "C Girls"]]:
-            for caterer in self.caterers[block]:
-                if caterer not in updated_caterers:
-                    self.fb.update(f"org-backup/vitc/mess/{self.caterer_codes[caterer]}-{self.mess_type.get()[0]}", {"menuUpdated": time})
-                    updated_caterers.append(caterer)
+        if self.hostel_type.get() == "M" or self.caterer.get() in ["SRRC", "Zenith"]:
+            for block in ["A", "C Boys", "D1", "D2"]:
+                for caterer in self.caterers[block][self.mess_type.get()]:
+                    code = self.caterer_codes[block][self.mess_type.get()][caterer]
+                    if code not in updated_caterers:
+                        self.fb.update(f"org-backup/vitc/mess/{self.caterer_codes[block][self.mess_type.get()][caterer]}-{self.mess_type.get()[0]}", {"menuUpdated": time})
+                        updated_caterers.append(code)
+            for block in ["B", "C Girls"]:
+                for caterer in ["SRRC", "Zenith"]:
+                    code = self.caterer_codes[block][self.mess_type.get()][caterer]
+                    if code not in updated_caterers:
+                        self.fb.update(f"org-backup/vitc/mess/{self.caterer_codes[block][self.mess_type.get()][caterer]}-{self.mess_type.get()[0]}", {"menuUpdated": time})
+                        updated_caterers.append(code)
+        else:
+            for block in ["B", "C Girls"]:
+                for caterer in ["ABFC", "Shakti"]:
+                    code = self.caterer_codes[block][self.mess_type.get()][caterer]
+                    if code not in updated_caterers:
+                        self.fb.update(f"org-backup/vitc/mess/{self.caterer_codes[block][self.mess_type.get()][caterer]}-{self.mess_type.get()[0]}", {"menuUpdated": time})
+                        updated_caterers.append(code)
 
 if __name__ == "__main__":
     print("Don't run this file directly. Run main.py instead.")
